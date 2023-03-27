@@ -1,0 +1,72 @@
+class Program
+{
+        static void Main(string[] args)
+        {
+        Branch root = new Branch("root");
+        Branch node1_1 = new Branch("node1_1");
+        Branch node1_2 = new Branch("node1_2");
+        Branch node2_1 = new Branch("node2_1");
+        Branch node2_2 = new Branch("node2_2");
+        Branch node2_3 = new Branch("node2_3");
+        Branch node2_4 = new Branch("node2_4");
+        Branch node3_1 = new Branch("node3_1");
+        Branch node3_2 = new Branch("node3_2");
+        Branch node3_3 = new Branch("node3_3");
+        Branch node4_1 = new Branch("node4_1");
+
+        root.Branches.Add(node1_1);
+        root.Branches.Add(node1_2);
+        node1_1.Branches.Add(node2_1);
+        node1_2.Branches.Add(node2_2);
+        node1_2.Branches.Add(node2_3);
+        node1_2.Branches.Add(node2_4);
+        node2_2.Branches.Add(node3_1);
+        node2_3.Branches.Add(node3_2);
+        node2_3.Branches.Add(node3_3);
+        node3_2.Branches.Add(node4_1);
+
+
+        // Test the depth calculation
+        var name = Console.ReadLine();
+        int depth = GetNodeDepth(root, name.ToLower());
+        Console.WriteLine($"The depth of {name} is {depth}.");
+
+        // Wait for user input before closing the console window
+        Console.ReadLine();
+    }
+
+    static int GetNodeDepth(Branch parent, string nodeName)
+    {
+        // Base case: the parent node is the target node
+        if (parent.Name.ToLower() == nodeName)
+        {
+            return 0;
+        }
+
+        // Recursive case: search the children of the parent node
+        int depth = -1;
+        foreach (Branch child in parent.Branches)
+        {
+            int childDepth = GetNodeDepth(child, nodeName);
+            if (childDepth >= 0 && (depth == -1 || childDepth < depth))
+            {
+                depth = childDepth + 1;
+            }
+        }
+
+        return depth;
+    }
+
+}
+
+class Branch
+{
+    public string Name;
+    public List<Branch> Branches;
+
+    public Branch(string name)
+    {
+        Name = name;
+        Branches = new List<Branch>();
+    }
+}
